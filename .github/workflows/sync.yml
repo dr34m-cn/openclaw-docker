@@ -28,6 +28,10 @@ jobs:
           
           TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest")
           
+          echo "## 🐳 Docker Image Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Tag | Status | Source Digest | Target Digest |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          
           echo "🚀 Starting sync for tags: ${TAGS[*]}"
           
           for TAG in "${TAGS[@]}"; do
@@ -38,6 +42,7 @@ jobs:
             
             if [ "$SRC_DIGEST" == "missing_in_source" ]; then
               echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
+              echo "| \`$TAG\` | ⚠️ Source Missing | N/A | N/A |" >> $GITHUB_STEP_SUMMARY
               continue
             fi
             
@@ -46,12 +51,20 @@ jobs:
             echo "   Source Digest: $SRC_DIGEST"
             echo "   Target Digest: $TGT_DIGEST"
             
+            SHORT_SRC=$(echo $SRC_DIGEST | cut -c1-15)...
+            SHORT_TGT=$(echo $TGT_DIGEST | cut -c1-15)...
+            if [ "$TGT_DIGEST" == "missing_in_target" ]; then
+                SHORT_TGT="None"
+            fi
+            
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
               echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
+              echo "| \`$TAG\` | ⏭️ Skipped (Match) | \`$SHORT_SRC\` | \`$SHORT_TGT\` |" >> $GITHUB_STEP_SUMMARY
             else
               echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
               skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
               echo "✅ Finished syncing: '$TAG'"
+              echo "| \`$TAG\` | ✅ Synced | \`$SHORT_SRC\` | \`$SHORT_TGT\` |" >> $GITHUB_STEP_SUMMARY
             fi
           done
           
