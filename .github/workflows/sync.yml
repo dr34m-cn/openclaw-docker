@@ -3,6 +3,9 @@ name: Sync to Docker Hub
 on:
   repository_dispatch:
     types: [sync-openclaw]
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
