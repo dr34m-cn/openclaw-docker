@@ -17,21 +17,27 @@ jobs:
         run: |
           UTC_TIME=$(date -u +"%Y-%m-%d %H:%M UTC")
           BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")
-
-          # 1. 截取从第一行到 start 标签的所有内容，写入临时文件
-          sed -n '1,//p' README.md > temp.md
           
-          # 2. 写入你要的格式：一个空行 + 两个时间 + 一个空行
+          START_LINE=$(grep -n "<!-- placeholder-start -->" README.md | head -n 1 | cut -d: -f1)
+          END_LINE=$(grep -n "<!-- placeholder-end -->" README.md | head -n 1 | cut -d: -f1)
+          
+          if [ -z "$START_LINE" ] || [ -z "$END_LINE" ]; then
+            echo "❌ 找不到占位符，请检查 README.md"
+            exit 1
+          fi
+          
+          head -n "$START_LINE" README.md > temp.md
+          
           echo "" >> temp.md
           echo "Last synced: $UTC_TIME" >> temp.md
           echo "最后同步于：$BJT_TIME" >> temp.md
           echo "" >> temp.md
           
-          # 3. 截取从 end 标签到最后一行的所有内容，追加到临时文件
-          sed -n '//,$p' README.md >> temp.md
+          # 截取从 END_LINE 到文件末尾的所有内容并追加
+          tail -n +"$END_LINE" README.md >> temp.md
           
-          # 4. 覆盖原文件
           mv temp.md README.md
+          echo "✅ README 更新成功！"
 
       - name: Commit and Push changes
         run: |
