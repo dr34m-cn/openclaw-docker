@@ -84,12 +84,12 @@ jobs:
             fi
           done
           
-          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S +08:00")
+          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S")
+          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")
           echo "" >> $SUMMARY_FILE
-          echo "Last synced: $UTC_TIME" >> $SUMMARY_FILE
+          echo "Last synced(UTC): $UTC_TIME" >> $SUMMARY_FILE
           echo "" >> $SUMMARY_FILE
-          echo "最后同步于：$BJT_TIME" >> $SUMMARY_FILE
+          echo "最后同步(北京时间): $BJT_TIME" >> $SUMMARY_FILE
 
           
           cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
