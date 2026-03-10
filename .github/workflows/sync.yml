@@ -61,20 +61,32 @@ jobs:
             echo "   Source Digest: $SRC_DIGEST"
             echo "   Target Digest: $DISPLAY_TGT"
             
+            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:10}...\`</summary>\`$SRC_DIGEST\`</details>"
+            
+            if [ "$DISPLAY_TGT" == "None" ]; then
+              FORMATTED_TGT="None"
+            else
+              FORMATTED_TGT="<details><summary>\`${DISPLAY_TGT:0:10}...\`</summary>\`$DISPLAY_TGT\`</details>"
+            fi
+            # -------------------------------------------------------------------
+
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
               echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
-              echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | \`$SRC_DIGEST\` | \`$DISPLAY_TGT\` |" >> $SUMMARY_FILE
+              echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | $FORMATTED_SRC | $FORMATTED_TGT |" >> $SUMMARY_FILE
             else
               echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
               skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
               echo "✅ Finished syncing: '$TAG'"
-              echo "| \`$TAG\` | ✅ Synced | $SYNC_TIME | \`$SRC_DIGEST\` | \`$DISPLAY_TGT\` |" >> $SUMMARY_FILE
+              
+              FORMATTED_TGT_AFTER="<details><summary>\`${SRC_DIGEST:0:10}...\`</summary>\`$SRC_DIGEST\`</details>"
+              
+              echo "| \`$TAG\` | ✅ Synced | $SYNC_TIME | $FORMATTED_SRC | $FORMATTED_TGT_AFTER |" >> $SUMMARY_FILE
             fi
           done
           
           cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
           
-          awk -v r="$(cat $SUMMARY_FILE)" '/<!-- placeholder-start -->/{print;print "";print r;print "";f=1;next} /<!-- placeholder-end -->/{f=0} !f' README.md > README.tmp && mv README.tmp README.md
+          awk -v r="$(cat $SUMMARY_FILE)" '//{print;print "";print r;print "";f=1;next} //{f=0} !f' README.md > README.tmp && mv README.tmp README.md
           
           echo "----------------------------------------"
           echo "🎉 Sync workflow completed successfully!"
