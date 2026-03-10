@@ -2,7 +2,7 @@ name: Update README Sync Time
 
 on:
   repository_dispatch:
-    types: [hand-update]
+    types: [sync-openclaw]
   workflow_dispatch:
 
 jobs:
@@ -15,25 +15,23 @@ jobs:
 
       - name: Update time in README
         run: |
-          python3 -c "
-          import re
-          from datetime import datetime, timezone, timedelta
+          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")
 
-          now = datetime.now(timezone.utc)
-          utc_str = now.strftime('%Y-%m-%d %H:%M:%S UTC')
-          beijing_tz = timezone(timedelta(hours=8))
-          beijing_str = now.astimezone(beijing_tz).strftime('%Y-%m-%d %H:%M:%S')
-
-          with open('README.md', 'r', encoding='utf-8') as f:
-              content = f.read()
-
-          replacement = f'\nLast synced: {utc_str}\n\n最后同步于：{beijing_str}\n'
-
-          new_content = re.sub(r'.*?', replacement, content, flags=re.DOTALL)
-
-          with open('README.md', 'w', encoding='utf-8') as f:
-              f.write(new_content)
-          "
+          awk -v utc="Last synced: $UTC_TIME" -v bjt="最后同步于：$BJT_TIME" '
+          // {
+              print
+              print utc
+              print ""
+              print bjt
+              skip=1
+              next
+          }
+          // {
+              skip=0
+          }
+          !skip {print}
+          ' README.md > temp.md && mv temp.md README.md
 
       - name: Commit and Push changes
         run: |
