@@ -3,10 +3,10 @@ name: Sync to Docker Hub
 on:
   repository_dispatch:
     types: [sync-openclaw]
-  push:
-    branches:
-      - main
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   sync:
@@ -21,16 +21,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Sync Specific Tags
+      - name: Sync Specific Tags and Generate Summary
         run: |
           SOURCE="ghcr.io/openclaw/openclaw"
           TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
           
           TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest")
           
-          echo "## 🐳 Docker Image Sync Summary" >> $GITHUB_STEP_SUMMARY
-          echo "| Tag | Status | Source Digest | Target Digest |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          SUMMARY_FILE="sync_summary.md"
+          
+          echo "## 🐳 Docker Image Sync Summary" > $SUMMARY_FILE
+          echo "" >> $SUMMARY_FILE
+          echo "| Tag | Status | Sync Time (UTC) | Source Digest | Target Digest |" >> $SUMMARY_FILE
+          echo "|---|---|---|---|---|" >> $SUMMARY_FILE
           
           echo "🚀 Starting sync for tags: ${TAGS[*]}"
           
@@ -38,35 +41,54 @@ jobs:
             echo "----------------------------------------"
             echo "🔍 Checking tag: $TAG"
             
+            SYNC_TIME=$(date -u "+%Y-%m-%d %H:%M:%S")
+            
             SRC_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$SOURCE:$TAG" 2>/dev/null || echo "missing_in_source")
             
             if [ "$SRC_DIGEST" == "missing_in_source" ]; then
               echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
-              echo "| \`$TAG\` | ⚠️ Source Missing | N/A | N/A |" >> $GITHUB_STEP_SUMMARY
+              echo "| \`$TAG\` | ⚠️ Source Missing | $SYNC_TIME | N/A | N/A |" >> $SUMMARY_FILE
               continue
             fi
             
             TGT_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$TARGET:$TAG" 2>/dev/null || echo "missing_in_target")
             
-            echo "   Source Digest: $SRC_DIGEST"
-            echo "   Target Digest: $TGT_DIGEST"
-            
-            SHORT_SRC=$(echo $SRC_DIGEST | cut -c1-15)...
-            SHORT_TGT=$(echo $TGT_DIGEST | cut -c1-15)...
+            DISPLAY_TGT=$TGT_DIGEST
             if [ "$TGT_DIGEST" == "missing_in_target" ]; then
-                SHORT_TGT="None"
+              DISPLAY_TGT="None"
             fi
+            
+            echo "   Source Digest: $SRC_DIGEST"
+            echo "   Target Digest: $DISPLAY_TGT"
             
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
               echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
-              echo "| \`$TAG\` | ⏭️ Skipped (Match) | \`$SHORT_SRC\` | \`$SHORT_TGT\` |" >> $GITHUB_STEP_SUMMARY
+              echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | \`$SRC_DIGEST\` | \`$DISPLAY_TGT\` |" >> $SUMMARY_FILE
             else
               echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
               skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
               echo "✅ Finished syncing: '$TAG'"
-              echo "| \`$TAG\` | ✅ Synced | \`$SHORT_SRC\` | \`$SHORT_TGT\` |" >> $GITHUB_STEP_SUMMARY
+              echo "| \`$TAG\` | ✅ Synced | $SYNC_TIME | \`$SRC_DIGEST\` | \`$DISPLAY_TGT\` |" >> $SUMMARY_FILE
             fi
           done
           
+          cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
+          
+          awk -v r="$(cat $SUMMARY_FILE)" '/# start/{print;print "";print r;print "";f=1;next} /# end/{f=0} !f' README.md > README.tmp && mv README.tmp README.md
+          
           echo "----------------------------------------"
           echo "🎉 Sync workflow completed successfully!"
+
+      - name: Commit and Push README
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          
+          if ! git diff --staged --quiet; then
+            git commit -m "Synced at --->--->--->--->--->--->--->--->--->--->--->--->--->"
+            git push
+            echo "✅ README updated and pushed successfully."
+          else
+            echo "⏭️ No changes in README to commit."
+          fi
