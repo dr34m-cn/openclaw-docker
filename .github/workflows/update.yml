@@ -1,0 +1,50 @@
+name: Update README Sync Time
+
+on:
+  repository_dispatch:
+    types: [hand-update]
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update time in README
+        run: |
+          python3 -c "
+          import re
+          from datetime import datetime, timezone, timedelta
+
+          now = datetime.now(timezone.utc)
+          utc_str = now.strftime('%Y-%m-%d %H:%M:%S UTC')
+          beijing_tz = timezone(timedelta(hours=8))
+          beijing_str = now.astimezone(beijing_tz).strftime('%Y-%m-%d %H:%M:%S')
+
+          with open('README.md', 'r', encoding='utf-8') as f:
+              content = f.read()
+
+          replacement = f'\nLast synced: {utc_str}\n\n最后同步于：{beijing_str}\n'
+
+          new_content = re.sub(r'.*?', replacement, content, flags=re.DOTALL)
+
+          with open('README.md', 'w', encoding='utf-8') as f:
+              f.write(new_content)
+          "
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add README.md
+          
+          if ! git diff --staged --quiet; then
+            git commit -m "docs: update sync time"
+            git push
+          else
+            echo "✨ README.md 内容无变化，无需提交。"
+          fi
