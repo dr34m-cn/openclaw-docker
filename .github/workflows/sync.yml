@@ -1,8 +1,8 @@
-name: Smart Sync Tags to Docker Hub
+name: Sync to Docker Hub
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '32 * * * *'
   push:
     branches:
       - main
@@ -21,14 +21,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Smart Sync Specific Tags
+      - name: Sync Specific Tags
         run: |
           SOURCE="ghcr.io/openclaw/openclaw"
           TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
           
-          TAGS=("main" "main-slim" "latest")
+          TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest")
           
-          echo "🚀 Starting smart sync for tags: ${TAGS[*]}"
+          echo "🚀 Starting sync for tags: ${TAGS[*]}"
           
           for TAG in "${TAGS[@]}"; do
             echo "----------------------------------------"
@@ -56,4 +56,4 @@ jobs:
           done
           
           echo "----------------------------------------"
-          echo "🎉 Smart sync workflow completed successfully!"
+          echo "🎉 Sync workflow completed successfully!"
