@@ -74,7 +74,7 @@ jobs:
           
           cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
           
-          awk -v r="$(cat $SUMMARY_FILE)" '/# start/{print;print "";print r;print "";f=1;next} /# end/{f=0} !f' README.md > README.tmp && mv README.tmp README.md
+          awk -v r="$(cat $SUMMARY_FILE)" '/<!-- placeholder-start -->/{print;print "";print r;print "";f=1;next} /<!-- placeholder-end -->/{f=0} !f' README.md > README.tmp && mv README.tmp README.md
           
           echo "----------------------------------------"
           echo "🎉 Sync workflow completed successfully!"
