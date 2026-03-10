@@ -1,8 +1,8 @@
-name: Sync Specific Tags to Docker Hub
+name: Smart Sync Tags to Docker Hub
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
   push:
     branches:
       - main
@@ -21,23 +21,39 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Sync Specific Tags via Skopeo
+      - name: Smart Sync Specific Tags
         run: |
           SOURCE="ghcr.io/openclaw/openclaw"
           TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
           
           TAGS=("main" "main-slim" "latest")
           
-          echo "🚀 Starting to sync specific tags: ${TAGS[*]}"
+          echo "🚀 Starting smart sync for tags: ${TAGS[*]}"
           
           for TAG in "${TAGS[@]}"; do
             echo "----------------------------------------"
-            echo "🔄 Syncing tag: $TAG"
+            echo "🔍 Checking tag: $TAG"
             
-            skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG" || echo "⚠️ Warning: Failed to sync $TAG (Maybe it does not exist on source yet)."
+            SRC_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$SOURCE:$TAG" 2>/dev/null || echo "missing_in_source")
             
-            echo "✅ Finished syncing: $TAG"
+            if [ "$SRC_DIGEST" == "missing_in_source" ]; then
+              echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
+              continue
+            fi
+            
+            TGT_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$TARGET:$TAG" 2>/dev/null || echo "missing_in_target")
+            
+            echo "   Source Digest: $SRC_DIGEST"
+            echo "   Target Digest: $TGT_DIGEST"
+            
+            if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
+              echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
+            else
+              echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
+              skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
+              echo "✅ Finished syncing: '$TAG'"
+            fi
           done
           
           echo "----------------------------------------"
-          echo "🎉 All specified tags synchronized successfully!"
+          echo "🎉 Smart sync workflow completed successfully!"
