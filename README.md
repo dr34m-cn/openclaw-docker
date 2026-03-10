@@ -24,16 +24,16 @@ docker pull dr34m/openclaw:main-slim
 
 | Tag | Status | Sync Time (UTC) | Source Digest | Target Digest |
 |---|---|---|---|---|
-| `main-amd64` | ✅ Synced | 2026-03-10 17:40:13 | <details><summary>`sha256:4a3...`</summary>`sha256:4a34d9afdf394e94fa457b51055cad476115f96509bb57654d6ca15bfa420fdd`</details> | <details><summary>`sha256:4a3...`</summary>`sha256:4a34d9afdf394e94fa457b51055cad476115f96509bb57654d6ca15bfa420fdd`</details> |
-| `main-arm64` | ✅ Synced | 2026-03-10 17:40:32 | <details><summary>`sha256:c12...`</summary>`sha256:c12021a43d9fc1092b56f57c34ee44fb6e8b5d59d4a567d366d6bcfaeb780a6e`</details> | <details><summary>`sha256:c12...`</summary>`sha256:c12021a43d9fc1092b56f57c34ee44fb6e8b5d59d4a567d366d6bcfaeb780a6e`</details> |
-| `main` | ⏭️ Skipped (Match) | 2026-03-10 17:40:42 | <details><summary>`sha256:fd0...`</summary>`sha256:fd00feaae9b6285eec097e5592039b6b591756bf76f88a8f513858a826bf66c4`</details> | <details><summary>`sha256:fd0...`</summary>`sha256:fd00feaae9b6285eec097e5592039b6b591756bf76f88a8f513858a826bf66c4`</details> |
-| `main-slim-amd64` | ⏭️ Skipped (Match) | 2026-03-10 17:40:44 | <details><summary>`sha256:024...`</summary>`sha256:0246921b99420d5e8fa4108e5493a00a41f7e08faa888f9bd486e6031c7e6fdd`</details> | <details><summary>`sha256:024...`</summary>`sha256:0246921b99420d5e8fa4108e5493a00a41f7e08faa888f9bd486e6031c7e6fdd`</details> |
-| `main-slim-arm64` | ✅ Synced | 2026-03-10 17:40:45 | <details><summary>`sha256:b59...`</summary>`sha256:b59e2668964779444199a50e804619005d93be2e89cdb5aa66850444731033ae`</details> | <details><summary>`sha256:b59...`</summary>`sha256:b59e2668964779444199a50e804619005d93be2e89cdb5aa66850444731033ae`</details> |
-| `main-slim` | ⏭️ Skipped (Match) | 2026-03-10 17:40:59 | <details><summary>`sha256:d4e...`</summary>`sha256:d4efec687b339f8b8bb67bbf6ff89dda55a675d57a7f776a258fed664de1336b`</details> | <details><summary>`sha256:d4e...`</summary>`sha256:d4efec687b339f8b8bb67bbf6ff89dda55a675d57a7f776a258fed664de1336b`</details> |
-| `latest` | ⏭️ Skipped (Match) | 2026-03-10 17:41:01 | <details><summary>`sha256:7b1...`</summary>`sha256:7b1294f6aa2eb05b2070cc614743f79212313fc294e5de221ada8a2969ea52f6`</details> | <details><summary>`sha256:7b1...`</summary>`sha256:7b1294f6aa2eb05b2070cc614743f79212313fc294e5de221ada8a2969ea52f6`</details> |
+| `main-amd64` | ✅ Synced | 2026-03-10 17:50:11 | <details><summary>`sha256:e60...`</summary>`sha256:e607f235c3235f45c9212181e25da14a7ed0d325d3e5c6c8a454e693bf754527`</details> | <details><summary>`sha256:e60...`</summary>`sha256:e607f235c3235f45c9212181e25da14a7ed0d325d3e5c6c8a454e693bf754527`</details> |
+| `main-arm64` | ✅ Synced | 2026-03-10 17:51:16 | <details><summary>`sha256:55c...`</summary>`sha256:55cb81e146966a20a55e276c6b89aa919cc28ccb9a42b2c037c59a0e1caba3a3`</details> | <details><summary>`sha256:55c...`</summary>`sha256:55cb81e146966a20a55e276c6b89aa919cc28ccb9a42b2c037c59a0e1caba3a3`</details> |
+| `main` | ✅ Synced | 2026-03-10 17:51:45 | <details><summary>`sha256:e87...`</summary>`sha256:e87bba63c109277c01e46eaaf35409a1479f145badffd249c857351b256d52c7`</details> | <details><summary>`sha256:e87...`</summary>`sha256:e87bba63c109277c01e46eaaf35409a1479f145badffd249c857351b256d52c7`</details> |
+| `main-slim-amd64` | ✅ Synced | 2026-03-10 17:51:53 | <details><summary>`sha256:804...`</summary>`sha256:804cd66a5667e9d1c95a768d7ac59d25c0aeba273450947b17eb4f7bdf5bfbee`</details> | <details><summary>`sha256:804...`</summary>`sha256:804cd66a5667e9d1c95a768d7ac59d25c0aeba273450947b17eb4f7bdf5bfbee`</details> |
+| `main-slim-arm64` | ✅ Synced | 2026-03-10 17:52:19 | <details><summary>`sha256:b90...`</summary>`sha256:b90597fdd713cbe095b9e3039c59b2659ce47bec9a00eefb5c3a585859e8b11c`</details> | <details><summary>`sha256:b90...`</summary>`sha256:b90597fdd713cbe095b9e3039c59b2659ce47bec9a00eefb5c3a585859e8b11c`</details> |
+| `main-slim` | ✅ Synced | 2026-03-10 17:53:19 | <details><summary>`sha256:086...`</summary>`sha256:0868bc8f91971916a8f934ea1634c3f752a8092017cad87f9085b35f301562af`</details> | <details><summary>`sha256:086...`</summary>`sha256:0868bc8f91971916a8f934ea1634c3f752a8092017cad87f9085b35f301562af`</details> |
+| `latest` | ⏭️ Skipped (Match) | 2026-03-10 17:53:27 | <details><summary>`sha256:7b1...`</summary>`sha256:7b1294f6aa2eb05b2070cc614743f79212313fc294e5de221ada8a2969ea52f6`</details> | <details><summary>`sha256:7b1...`</summary>`sha256:7b1294f6aa2eb05b2070cc614743f79212313fc294e5de221ada8a2969ea52f6`</details> |
 
-Last synced(UTC): 2026-03-10 17:41:02
+Last synced(UTC): 2026-03-10 17:53:30
 
-最后同步(北京时间): 2026-03-11 01:41:02
+最后同步(北京时间): 2026-03-11 01:53:30
 
 <!-- placeholder-end -->
