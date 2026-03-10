@@ -2,9 +2,17 @@
 
 ```sh
 docker pull dr34m/openclaw:latest
-# or
+```
+
+or
+
+```sh
 docker pull dr34m/openclaw:main
-# or
+```
+
+or
+
+```sh
 docker pull dr34m/openclaw:main-slim
 ```
 
