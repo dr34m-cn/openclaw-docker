@@ -15,23 +15,23 @@ jobs:
 
       - name: Update time in README
         run: |
-          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M UTC")
           BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")
 
-          awk -v utc="Last synced: $UTC_TIME" -v bjt="最后同步于：$BJT_TIME" '
-          // {
-              print
-              print utc
-              print ""
-              print bjt
-              skip=1
-              next
-          }
-          // {
-              skip=0
-          }
-          !skip {print}
-          ' README.md > temp.md && mv temp.md README.md
+          # 1. 截取从第一行到 start 标签的所有内容，写入临时文件
+          sed -n '1,//p' README.md > temp.md
+          
+          # 2. 写入你要的格式：一个空行 + 两个时间 + 一个空行
+          echo "" >> temp.md
+          echo "Last synced: $UTC_TIME" >> temp.md
+          echo "最后同步于：$BJT_TIME" >> temp.md
+          echo "" >> temp.md
+          
+          # 3. 截取从 end 标签到最后一行的所有内容，追加到临时文件
+          sed -n '//,$p' README.md >> temp.md
+          
+          # 4. 覆盖原文件
+          mv temp.md README.md
 
       - name: Commit and Push changes
         run: |
