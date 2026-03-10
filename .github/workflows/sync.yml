@@ -1,13 +1,9 @@
 name: Sync to Docker Hub
 
 on:
-  schedule:
-    - cron: '32 * * * *'
   push:
     branches:
       - main
-  workflow_dispatch:
-
 jobs:
   sync:
     runs-on: ubuntu-latest
