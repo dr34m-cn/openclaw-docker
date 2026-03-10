@@ -84,6 +84,14 @@ jobs:
             fi
           done
           
+          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S +08:00")
+          echo "" >> $SUMMARY_FILE
+          echo "Last synced: $UTC_TIME" >> $SUMMARY_FILE
+          echo "" >> $SUMMARY_FILE
+          echo "最后同步于：$BJT_TIME" >> $SUMMARY_FILE
+
+          
           cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
           
           awk -v r="$(cat $SUMMARY_FILE)" '/<!-- placeholder-start -->/{print;print "";print r;print "";f=1;next} /<!-- placeholder-end -->/{f=0} !f' README.md > README.tmp && mv README.tmp README.md
