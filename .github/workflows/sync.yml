@@ -1,4 +1,4 @@
-name: Sync Image to Docker Hub
+name: Sync Specific Tags to Docker Hub
 
 on:
   schedule:
@@ -21,10 +21,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Sync Image via Skopeo
+      - name: Sync Specific Tags via Skopeo
         run: |
-          SOURCE_IMAGE="docker://ghcr.io/openclaw/openclaw:latest"
-          TARGET_IMAGE="docker://docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw:latest"
-          echo "Starting sync from $SOURCE_IMAGE to $TARGET_IMAGE"
-          skopeo copy --all "$SOURCE_IMAGE" "$TARGET_IMAGE"
-          echo "Sync completed successfully!"
+          SOURCE="ghcr.io/openclaw/openclaw"
+          TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
+          
+          TAGS=("main" "main-slim" "latest")
+          
+          echo "🚀 Starting to sync specific tags: ${TAGS[*]}"
+          
+          for TAG in "${TAGS[@]}"; do
+            echo "----------------------------------------"
+            echo "🔄 Syncing tag: $TAG"
+            
+            skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG" || echo "⚠️ Warning: Failed to sync $TAG (Maybe it does not exist on source yet)."
+            
+            echo "✅ Finished syncing: $TAG"
+          done
+          
+          echo "----------------------------------------"
+          echo "🎉 All specified tags synchronized successfully!"
