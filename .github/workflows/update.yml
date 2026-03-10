@@ -49,7 +49,7 @@ jobs:
           git add README.md
           
           if ! git diff --staged --quiet; then
-            git commit -m "docs: update sync time"
+            git commit -m "Synced at --->--->--->--->--->--->--->--->--->"
             git push
           else
             echo "✨ README.md 内容无变化，无需提交。"
