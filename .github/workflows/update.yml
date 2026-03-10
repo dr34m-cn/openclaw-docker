@@ -1,9 +1,10 @@
 name: Update README Sync Time
 
 on:
-  repository_dispatch:
-    types: [sync-openclaw]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Sync to Docker Hub"]
+    types:
+      - completed
 
 jobs:
   update-readme:
@@ -15,8 +16,8 @@ jobs:
 
       - name: Update time in README
         run: |
-          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M UTC")
-          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S")
+          UTC_TIME=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          BJT_TIME=$(TZ='Asia/Shanghai' date +"%Y-%m-%d %H:%M:%S +08:00")
           
           START_LINE=$(grep -n "<!-- placeholder-start -->" README.md | head -n 1 | cut -d: -f1)
           END_LINE=$(grep -n "<!-- placeholder-end -->" README.md | head -n 1 | cut -d: -f1)
@@ -30,6 +31,7 @@ jobs:
           
           echo "" >> temp.md
           echo "Last synced: $UTC_TIME" >> temp.md
+          echo "" >> temp.md
           echo "最后同步于：$BJT_TIME" >> temp.md
           echo "" >> temp.md
           

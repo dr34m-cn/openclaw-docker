@@ -1,10 +1,10 @@
 name: Sync to Docker Hub
 
 on:
-  workflow_run:
-    workflows: ["Update README Sync Time"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [sync-openclaw]
+  workflow_dispatch:
+
 jobs:
   sync:
     runs-on: ubuntu-latest
