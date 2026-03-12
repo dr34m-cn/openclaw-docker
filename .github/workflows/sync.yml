@@ -26,7 +26,7 @@ jobs:
           SOURCE="ghcr.io/openclaw/openclaw"
           TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
           
-          TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest" "slim")
+          TAGS=("latest" "slim" "main" "main-slim" "main-amd64" "main-arm64" "main-slim-amd64" "main-slim-arm64")
           
           SUMMARY_FILE="sync_summary.md"
           
@@ -111,44 +111,4 @@ jobs:
             echo "✅ README updated and pushed successfully."
           else
             echo "⏭️ No changes in README to commit."
-          fi
-      
-      
-      - name: Clean up untagged images on Docker Hub
-        env:
-          DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_TOKEN }}
-          REPO_NAME: "openclaw" 
-        run: |
-          TOKEN=$(curl -s -H "Content-Type: application/json" \
-            -X POST -d '{"username": "'$DOCKERHUB_USER'", "password": "'$DOCKERHUB_PAT'"}' \
-            https://hub.docker.com/v2/users/login/ | jq -r .token)
-          
-          if [ "$TOKEN" == "null" ] || [ -z "$TOKEN" ]; then
-            echo "❌ 登录 Docker Hub API 失败，请检查 Secret 凭证！"
-            exit 1
-          fi
-          echo "✅ Token 获取成功！"
-          echo "==== 2. 检索 ${DOCKERHUB_USER}/${REPO_NAME} 中的无效镜像 ===="
-          DIGESTS=$(curl -s -H "Authorization: Bearer ${TOKEN}" \
-            "https://hub.docker.com/v2/namespaces/${DOCKERHUB_USER}/repositories/${REPO_NAME}/tags?page_size=100" | \
-            jq -r '.results[]? | select(.name == null or .status == "inactive") | .digest // empty')
-          if [ -z "$DIGESTS" ]; then
-            echo "✅ 仓库很干净，没有发现需要清理的悬空垃圾镜像。"
-          else
-            echo "⚠️ 发现以下垃圾镜像 (Digest)，准备开始清理："
-            echo "$DIGESTS"
-            for digest in $DIGESTS; do
-              echo "正在删除: $digest ..."
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE \
-                -H "Authorization: Bearer ${TOKEN}" \
-                "https://hub.docker.com/v2/namespaces/${DOCKERHUB_USER}/repositories/${REPO_NAME}/tags/${digest}/")
-              
-              if [ "$STATUS" == "204" ] || [ "$STATUS" == "200" ] || [ "$STATUS" == "202" ]; then
-                echo "  -> ✅ 删除成功"
-              else
-                echo "  -> ❌ 删除失败 (HTTP 状态码: $STATUS)"
-              fi
-            done
-            echo "🎉 所有垃圾镜像清理任务完成！"
           fi
