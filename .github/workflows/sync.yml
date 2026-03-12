@@ -106,7 +106,7 @@ jobs:
           git add README.md
           
           if ! git diff --staged --quiet; then
-            git commit -m "Synced at --->--->--->--->--->--->--->--->--->--->--->--->--->"
+            git commit -m "Synced at ------------>--->--->--->--->--->--->--->--->--->--->"
             git push
             echo "✅ README updated and pushed successfully."
           else
