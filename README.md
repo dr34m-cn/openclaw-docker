@@ -1,5 +1,7 @@
 ### Automatically sync from `ghcr.io/openclaw/openclaw` to [Docker Hub](https://hub.docker.com/r/dr34m/openclaw) every 10 minutes.
 
+### Using Github Action for automatic synchronization ensures security, transparency, and no risk of malware infection.
+
 ```sh
 docker pull dr34m/openclaw:latest
 ```
@@ -17,6 +19,8 @@ docker pull dr34m/openclaw:main-slim
 ```
 
 ### 每10分钟自动从官方仓库`ghcr.io/openclaw/openclaw`同步到[Docker Hub](https://hub.docker.com/r/dr34m/openclaw).
+
+### 使用Github Action自动同步，安全公开无投毒风险。
 
 <!-- placeholder-start -->
 
