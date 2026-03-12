@@ -26,7 +26,7 @@ jobs:
           SOURCE="ghcr.io/openclaw/openclaw"
           TARGET="docker.io/${{ secrets.DOCKERHUB_USERNAME }}/openclaw"
           
-          TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest")
+          TAGS=("main-amd64" "main-arm64" "main" "main-slim-amd64" "main-slim-arm64" "main-slim" "latest" "slim")
           
           SUMMARY_FILE="sync_summary.md"
           
