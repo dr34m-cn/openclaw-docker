@@ -61,7 +61,7 @@ jobs:
             echo "   Source Digest: $SRC_DIGEST"
             echo "   Target Digest: $DISPLAY_TGT"
             
-            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:15}...\`</summary>\`$SRC_DIGEST\`</details>"
+            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:13}...${SRC_DIGEST:65:71}\`</summary>\`$SRC_DIGEST\`</details>"
             
             # -------------------------------------------------------------------
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
