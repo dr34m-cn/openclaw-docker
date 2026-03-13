@@ -32,8 +32,8 @@ jobs:
           
           echo "## 🐳 Docker Image Sync Summary" > $SUMMARY_FILE
           echo "" >> $SUMMARY_FILE
-          echo "| Tag | Status | Sync Time (UTC) | Source Digest | Target Digest |" >> $SUMMARY_FILE
-          echo "|---|---|---|---|---|" >> $SUMMARY_FILE
+          echo "| Tag | Status | Sync Time (UTC) | Digest |" >> $SUMMARY_FILE
+          echo "|---|---|---|---|" >> $SUMMARY_FILE
           
           echo "🚀 Starting sync for tags: ${TAGS[*]}"
           
@@ -47,7 +47,7 @@ jobs:
             
             if [ "$SRC_DIGEST" == "missing_in_source" ]; then
               echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
-              echo "| \`$TAG\` | ⚠️ Source Missing | $SYNC_TIME | N/A | N/A |" >> $SUMMARY_FILE
+              echo "| \`$TAG\` | ⚠️ Source Missing | $SYNC_TIME | N/A |" >> $SUMMARY_FILE
               continue
             fi
             
@@ -61,26 +61,18 @@ jobs:
             echo "   Source Digest: $SRC_DIGEST"
             echo "   Target Digest: $DISPLAY_TGT"
             
-            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:10}...\`</summary>\`$SRC_DIGEST\`</details>"
+            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:15}...\`</summary>\`$SRC_DIGEST\`</details>"
             
-            if [ "$DISPLAY_TGT" == "None" ]; then
-              FORMATTED_TGT="None"
-            else
-              FORMATTED_TGT="<details><summary>\`${DISPLAY_TGT:0:10}...\`</summary>\`$DISPLAY_TGT\`</details>"
-            fi
             # -------------------------------------------------------------------
-
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
               echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
-              echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | $FORMATTED_SRC | $FORMATTED_TGT |" >> $SUMMARY_FILE
+              echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | $FORMATTED_SRC |" >> $SUMMARY_FILE
             else
               echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
               skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
               echo "✅ Finished syncing: '$TAG'"
               
-              FORMATTED_TGT_AFTER="<details><summary>\`${SRC_DIGEST:0:10}...\`</summary>\`$SRC_DIGEST\`</details>"
-              
-              echo "| \`$TAG\` | ✅ Synced | $SYNC_TIME | $FORMATTED_SRC | $FORMATTED_TGT_AFTER |" >> $SUMMARY_FILE
+              echo "| \`$TAG\` | ✅ Synced | $SYNC_TIME | $FORMATTED_SRC |" >> $SUMMARY_FILE
             fi
           done
           
@@ -90,7 +82,6 @@ jobs:
           echo "Last synced(UTC): $UTC_TIME" >> $SUMMARY_FILE
           echo "" >> $SUMMARY_FILE
           echo "最后同步(北京时间): $BJT_TIME" >> $SUMMARY_FILE
-
           
           cat $SUMMARY_FILE >> $GITHUB_STEP_SUMMARY
           
