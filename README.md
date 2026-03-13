@@ -1,6 +1,6 @@
 ### Automatically sync from `ghcr.io/openclaw/openclaw` to [Docker Hub](https://hub.docker.com/r/dr34m/openclaw) every 10 minutes.
 
-<a href="https://hub.docker.com/r/dr34m/tao-sync">
+<a href="https://hub.docker.com/r/dr34m/openclaw">
       <img src="https://img.shields.io/docker/pulls/dr34m/openclaw?color=%2348BB78&logo=docker&label=pulls" alt="DockerHub" />
     </a>
 
