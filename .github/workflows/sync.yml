@@ -47,32 +47,46 @@ jobs:
             
             if [ "$SRC_DIGEST" == "missing_in_source" ]; then
               echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
-              echo "   Source Error details:"
               cat src_error.log
               echo "| \`$TAG\` | ⚠️ Source Missing | $SYNC_TIME | N/A |" >> $SUMMARY_FILE
               continue
             fi
             
+            README_DIGEST=$(grep "| \`$TAG\` |" README.md 2>/dev/null | grep -o 'sha256:[a-f0-9]\{64\}' | head -n 1 || echo "not_found_in_readme")
+            
+            echo "   Source Digest: $SRC_DIGEST"
+            echo "   README Digest: ${README_DIGEST:-None}"
+            
+            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:13}...${SRC_DIGEST:65:71}\`</summary>\`$SRC_DIGEST\`</details>"
+            
+            if [ "$SRC_DIGEST" == "$README_DIGEST" ]; then
+              echo "✅ Source matches README cache. No update needed for '$TAG'. Skipping Docker Hub check!"
+              echo "| \`$TAG\` | ⏭️ Skipped (Cached) | $SYNC_TIME | $FORMATTED_SRC |" >> $SUMMARY_FILE
+              continue
+            fi
+            
+            echo "🔄 Cache miss or image updated. Inspecting target on Docker Hub..."
             TGT_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$TARGET:$TAG" 2>tgt_error.log || echo "missing_in_target")
             
             DISPLAY_TGT=$TGT_DIGEST
             if [ "$TGT_DIGEST" == "missing_in_target" ]; then
               DISPLAY_TGT="None"
-              echo "🚨 [DEBUG] Target inspect failed for '$TAG'! Real error was:"
+              echo "🚨 [DEBUG] Target inspect failed for '$TAG'. Real error was:"
               cat tgt_error.log
+              
+              if grep -q "toomanyrequests" tgt_error.log; then
+                echo "❌ CRITICAL: Docker Hub Rate Limit Reached! Aborting workflow to protect API limits."
+                exit 1
+              fi
             fi
             
-            echo "   Source Digest: $SRC_DIGEST"
             echo "   Target Digest: $DISPLAY_TGT"
             
-            FORMATTED_SRC="<details><summary>\`${SRC_DIGEST:0:13}...${SRC_DIGEST:65:71}\`</summary>\`$SRC_DIGEST\`</details>"
-            
-            # -------------------------------------------------------------------
             if [ "$SRC_DIGEST" == "$TGT_DIGEST" ]; then
-              echo "✅ Digests match perfectly. No update needed for '$TAG'. Skipping sync."
+              echo "✅ Target matches Source. No update needed for '$TAG'."
               echo "| \`$TAG\` | ⏭️ Skipped (Match) | $SYNC_TIME | $FORMATTED_SRC |" >> $SUMMARY_FILE
             else
-              echo "🔄 Digests differ or target is missing. Syncing '$TAG'..."
+              echo "🔄 Syncing '$TAG' to Docker Hub..."
               skopeo copy --all "docker://$SOURCE:$TAG" "docker://$TARGET:$TAG"
               echo "✅ Finished syncing: '$TAG'"
               
