@@ -1,5 +1,9 @@
 ### Automatically sync from `ghcr.io/openclaw/openclaw` to [Docker Hub](https://hub.docker.com/r/dr34m/openclaw) every 10 minutes.
 
+<a href="https://hub.docker.com/r/dr34m/tao-sync">
+      <img src="https://img.shields.io/docker/pulls/dr34m/openclaw?color=%2348BB78&logo=docker&label=pulls" alt="DockerHub" />
+    </a>
+
 ### Using Github Action for automatic synchronization ensures security, transparency, and no risk of malware infection.
 
 ```sh
