@@ -43,19 +43,23 @@ jobs:
             
             SYNC_TIME=$(date -u "+%Y-%m-%d %H:%M:%S")
             
-            SRC_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$SOURCE:$TAG" 2>/dev/null || echo "missing_in_source")
+            SRC_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$SOURCE:$TAG" 2>src_error.log || echo "missing_in_source")
             
             if [ "$SRC_DIGEST" == "missing_in_source" ]; then
               echo "⚠️ Warning: Tag '$TAG' not found in source ($SOURCE). Skipping."
+              echo "   Source Error details:"
+              cat src_error.log
               echo "| \`$TAG\` | ⚠️ Source Missing | $SYNC_TIME | N/A |" >> $SUMMARY_FILE
               continue
             fi
             
-            TGT_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$TARGET:$TAG" 2>/dev/null || echo "missing_in_target")
+            TGT_DIGEST=$(skopeo inspect --format '{{.Digest}}' "docker://$TARGET:$TAG" 2>tgt_error.log || echo "missing_in_target")
             
             DISPLAY_TGT=$TGT_DIGEST
             if [ "$TGT_DIGEST" == "missing_in_target" ]; then
               DISPLAY_TGT="None"
+              echo "🚨 [DEBUG] Target inspect failed for '$TAG'! Real error was:"
+              cat tgt_error.log
             fi
             
             echo "   Source Digest: $SRC_DIGEST"
