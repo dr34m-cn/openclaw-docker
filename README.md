@@ -1,11 +1,12 @@
 <div align="center">
-  <p><em>Sync From / 同步自 `ghcr.io/openclaw/openclaw`</em></p>
+  <p><em>Sync From / 同步自 <a href="https://github.com/openclaw/openclaw/pkgs/container/openclaw">ghcr.io/openclaw/openclaw</a></em></p>
   <div>
     <a href="https://hub.docker.com/r/dr34m/openclaw">
       <img src="https://img.shields.io/docker/pulls/dr34m/openclaw?color=%2348BB78&logo=docker&label=pulls" alt="DockerHub" />
     </a>
   </div>
 </div>
+
 
 
 ---
