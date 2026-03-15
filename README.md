@@ -36,6 +36,8 @@ Available Tags / 可用 Tags:
 * `main-slim-amd64`
 * `main-slim-arm64`
 
+<!-- placeholder-start -->
+
 | Tag | Status | Sync Time (UTC) | Digest |
 |---|---|---|---|
 | `latest` | ⏭️ Skipped (Identical digest) | 2026-03-15 04:50:55 | <details><summary>`sha256:a5a4c8...b5da02`</summary>`sha256:a5a4c83b773aca85a8ba99cf155f09afa33946c0aa5cc6a9ccb6162738b5da02`</details> |
