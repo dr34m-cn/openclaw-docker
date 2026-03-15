@@ -10,17 +10,16 @@
 docker pull dr34m/openclaw:latest
 ```
 
-or
+Available Tags / 可用 Tags: 
 
-```sh
-docker pull dr34m/openclaw:main
-```
-
-or
-
-```sh
-docker pull dr34m/openclaw:main-slim
-```
+* `latest` 
+* `slim` 
+*  `main`
+* `main-slim`
+* `main-amd64`
+* `main-arm64`
+* `main-slim-amd64`
+* `main-slim-arm64`
 
 ### 每10分钟自动从官方仓库`ghcr.io/openclaw/openclaw`同步到[Docker Hub](https://hub.docker.com/r/dr34m/openclaw).
 
