@@ -42,17 +42,17 @@ Available Tags / 可用 Tags:
 
 | Tag | Status | Sync Time (UTC) | Digest |
 |---|---|---|---|
-| `latest` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:56 | <details><summary>`sha256:a5a4c8...b5da02`</summary>`sha256:a5a4c83b773aca85a8ba99cf155f09afa33946c0aa5cc6a9ccb6162738b5da02`</details> |
-| `slim` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:58 | <details><summary>`sha256:28ad6b...272b40`</summary>`sha256:28ad6b7c84c4e0da7f84fa42d060dd92dfa2ed82c9089c28438e64769e272b40`</details> |
-| `main` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:58 | <details><summary>`sha256:183f1f...0ea43c`</summary>`sha256:183f1f7793d2341549ba6b14f934dcdfccbc23b42d1ddde437be942eb20ea43c`</details> |
-| `main-slim` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:59 | <details><summary>`sha256:93f392...0586a4`</summary>`sha256:93f3929d8267535fa2a13f57444a20a9df2874c6d4338ecc5ee09504b50586a4`</details> |
-| `main-amd64` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:59 | <details><summary>`sha256:3d0b1b...5bbad5`</summary>`sha256:3d0b1bbc079e080cc7fc5944b8b56eab26d825ad501b36778eb1058e925bbad5`</details> |
-| `main-arm64` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:20:59 | <details><summary>`sha256:90293f...e97380`</summary>`sha256:90293ff9ab9ae5d6dab1b8993654ce8128679e172f99f77fbab4a6ab4fe97380`</details> |
-| `main-slim-amd64` | ✅ Synced | 2026-03-18 23:21:00 | <details><summary>`sha256:2862fe...65e0f3`</summary>`sha256:2862fe33d51f429c30d66895f6da088b173959c20be66472d5cde42db265e0f3`</details> |
-| `main-slim-arm64` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:21:17 | <details><summary>`sha256:cb0802...a36b3a`</summary>`sha256:cb0802c45907a96e95385c109a3aec89751b74407f71d3e0aa60440d54a36b3a`</details> |
+| `latest` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:30:56 | <details><summary>`sha256:a5a4c8...b5da02`</summary>`sha256:a5a4c83b773aca85a8ba99cf155f09afa33946c0aa5cc6a9ccb6162738b5da02`</details> |
+| `slim` | ⏭️ Skipped (Identical digest) | 2026-03-18 23:30:59 | <details><summary>`sha256:28ad6b...272b40`</summary>`sha256:28ad6b7c84c4e0da7f84fa42d060dd92dfa2ed82c9089c28438e64769e272b40`</details> |
+| `main` | ✅ Synced | 2026-03-18 23:31:00 | <details><summary>`sha256:2528dd...714013`</summary>`sha256:2528dde0d2ad18dbb2c1c1e9fa3195275e7938ca62cee6b19d833f8a5b714013`</details> |
+| `main-slim` | ✅ Synced | 2026-03-18 23:31:14 | <details><summary>`sha256:caa1c1...6af30c`</summary>`sha256:caa1c1c0d2c75b1c35dc751200ba50870f89665cbb67ab4860d67dfe626af30c`</details> |
+| `main-amd64` | ✅ Synced | 2026-03-18 23:31:29 | <details><summary>`sha256:4af91d...c1698a`</summary>`sha256:4af91dacb8ae5c5767f4918e615248f053176c789c54af0f67d2495461c1698a`</details> |
+| `main-arm64` | ✅ Synced | 2026-03-18 23:31:50 | <details><summary>`sha256:ee6444...be47d1`</summary>`sha256:ee6444ba4d20ab07f3aaeb8820130c91ff6c1fbb357348bfda70aa72c9be47d1`</details> |
+| `main-slim-amd64` | ✅ Synced | 2026-03-18 23:32:03 | <details><summary>`sha256:acfe05...890872`</summary>`sha256:acfe05ae83238a3210d4e02f5ca50987fd98afff8d2df4ce44dd602e8a890872`</details> |
+| `main-slim-arm64` | ✅ Synced | 2026-03-18 23:32:22 | <details><summary>`sha256:ce44c8...986e28`</summary>`sha256:ce44c877f8a58cf1e924e2a686f6b9a783548eebd4cb9738d3584c123b986e28`</details> |
 
-Last synced(UTC): 2026-03-18 23:21:18
+Last synced(UTC): 2026-03-18 23:32:36
 
-最后同步(北京时间): 2026-03-19 07:21:18
+最后同步(北京时间): 2026-03-19 07:32:36
 
 <!-- placeholder-end -->
